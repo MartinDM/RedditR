@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -14,9 +14,12 @@
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
+    "cheerio": "^1.0.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
+    "himalaya": "^1.1.0",
     "next": "13.5.1",
+    "node-html-parser": "^6.1.13",
     "postcss": "8.4.30",
     "react": "18.2.0",
     "react-dom": "18.2.0",

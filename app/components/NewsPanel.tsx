@@ -1,20 +1,33 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
+import { TRedditFeed, TRedditPost } from '../types';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const NewsPanel = ({ type, posts }: { type: string; posts: any[] }) => {
-  const [loading, setLoading] = useState(true);
+type TNewsPanel = {
+  articles: TRedditPost[];
+  type: string;
+};
 
-  if (loading) return <div>Loading...</div>;
+const NewsPanel = ({ feed, type }: TNewsPanel) => {
   return (
-    <div>
-      <h1>News from {type}</h1>
+    <div className={'p-12 '}>
+      <h1 className={'mb-4 text-sm text-bold'}>News from {type}</h1>
       <ul>
-        {posts?.map((article, index) => (
-          <li key={index}>
-            <h2>{article.title}</h2>
-            <p>{article.description}</p>
-            <a href={article.url} target="_blank" rel="noopener noreferrer">
+        {feed.articles?.map((article) => (
+          <li key={article.id}>
+            <h2 className={'font-semibold'}>{article.title}</h2>
+            <Link href={article.link}>
+              {article.imgSrc && (
+                <Image
+                  alt={article.title}
+                  width={200}
+                  height={200}
+                  src={article.imgSrc}
+                />
+              )}
+            </Link>
+            <p>{article.author}</p>
+            <a href={article.link} target="_blank" rel="noopener noreferrer">
               Read more
             </a>
           </li>
