@@ -1,23 +1,47 @@
-import { Options } from 'xml2js';
-import { RequestOptions } from 'https';
-
-type DateString = string;
+type DateString = string
 
 export type TRedditPost = {
-  author: string;
-  content: string;
-  contentSnippet: string;
-  id: string;
-  link: string;
-  pubDate: DateString;
-  title: string;
-  imgSrc: string;
-};
+  author: string
+  content: string
+  contentSnippet: string
+  id: string
+  link: string
+  pubDate: DateString
+  title: string
+  imgSrc: string
+  articles: TRedditArticle[]
+}
+
+export type TParsedFeed = {
+  articles: TRedditArticle[]
+  link: string
+  image: string
+}
+
+export type TRedditArticle = {
+  id: string
+  imgSrc: string
+  pubDate: DateString
+  title: string
+  link: string
+}
 
 export type TRedditFeed = {
-  feedUrl: string;
-  items: TRedditPost[];
-  lastBuildData: DateString;
-  link: string;
-  title: string;
-};
+  feedUrl: string
+  items: TRedditPost[]
+  lastBuildDate?: DateString
+  link: string
+  pubDate: DateString
+  title: string
+}
+
+export type TRedditParsedItem = {
+  title: string
+  link: string
+  contentSnippet: string
+  content: string
+  id: string
+  pubDate: string
+  author: string
+  isoDate: DateString
+}
