@@ -12,9 +12,6 @@ const hostnames = [
 ]
 
 const nextConfig = {
-  experimental: {
-    optimizePackageImports: ['@chakra-ui/react'],
-  },
   images: {
     remotePatterns: hostnames.map((hostname) => ({
       protocol: 'https',

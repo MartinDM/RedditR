@@ -48,7 +48,7 @@ export default function Page() {
         {hasSelections && (
           <button
             onClick={() => handleClearLocalStorage()}
-            className="flex w-full flex-columns text-zinc-500 text-m text-bold hover:text-zinc-700 p-2"
+            className="flex flex-columns text-zinc-500 text-m text-bold hover:text-zinc-700 p-2"
           >
             <svg
               className="w-6 mr-3"

@@ -6,9 +6,12 @@
     "dev": "NODE_OPTIONS='--inspect' next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "surge": "cp CNAME ./dist && cd ./dist && surge"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
     "@heroicons/react": "^2.2.0",
     "@preline/combobox": "^2.6.0",
     "@tailwindcss/typography": "^0.5.15",

@@ -17,7 +17,10 @@ export type TArticle = {
   contentSnippet: string
 }
 
-const CORS_PROXY = 'http://localhost:8010/proxy/'
+let CORS_PROXY =
+  process.env.NODE_ENV === 'development'
+    ? process.env.NEXT_PUBLIC_LOCAL_HOST
+    : ''
 
 const _extractImageFromContent = (content: string): string | null => {
   const imgMatch = content.match(/<img.*?src="(.*?)"/)
@@ -36,7 +39,9 @@ const _convertToFriendlyDate = (isoDate: string): string => {
   return formattedDate
 }
 
-const _getFeedFromRss = async (subreddit: string): Promise => {
+const _getFeedFromRss = async (
+  subreddit: string
+): Promise<{ xmlDoc: Document | null; isPrivate: boolean }> => {
   const url = `${CORS_PROXY}${subreddit}/.rss`
   let isPrivate = false
   try {
@@ -53,7 +58,6 @@ const _getFeedFromRss = async (subreddit: string): Promise => {
     const text = await response.text()
     const parser = new DOMParser()
     const xmlDoc = parser.parseFromString(text, 'application/xml')
-    console.log(xmlDoc)
     if (response.status === 403) {
       isPrivate = true
     }
@@ -63,19 +67,23 @@ const _getFeedFromRss = async (subreddit: string): Promise => {
     return { xmlDoc: null, isPrivate: false }
   }
 }
+
 export const getFeedContent = async (
   subreddit: string
-): Promise<TParsedFeed> => {
+): Promise<TParsedFeed | null> => {
   try {
     const data = await _getFeedFromRss(subreddit)
     const isPrivate = data.isPrivate
     const document = data.xmlDoc
-    const link = document
-      .querySelector('link')
-      .getAttribute('href')
-      ?.split('/')
-      .slice(0, -1)
-      .join('/')
+    if (!document) {
+      throw new Error('Failed to parse XML document')
+    }
+    const linkElement = document.querySelector('link')
+    if (!linkElement) {
+      throw new Error('Missing link element in RSS feed')
+    }
+    const link =
+      linkElement.getAttribute('href')?.split('/').slice(0, -1).join('/') || ''
     let articles: TArticle[] = []
 
     if (!isPrivate) {
@@ -91,7 +99,7 @@ export const getFeedContent = async (
           ),
           contentSnippet: entry.querySelector('summary')?.textContent || '',
           image: _extractImageFromContent(
-            entry.querySelector('content')?.textContent
+            entry.querySelector('content')?.textContent || ''
           ),
         })
       )

@@ -9,6 +9,7 @@ import useSearch from '../hooks/useSearch'
 
 export type TSubscription = {
   display_name: string
+  isCollapsed: boolean
   community_icon: string
   display_name_prefixed: string
   id: string
@@ -17,7 +18,7 @@ export type TSubscription = {
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
-  const [searchResults, setSearchResults] = useState<TSubscription[]>([])
+  const [searchResults, setSearchResults] = useState<TSubscription[]>(null)
   const [selections, setSelections] = useAtom<TSubscription[]>(selectionsAtom)
 
   const searchInput = useRef(null)
@@ -59,10 +60,15 @@ const Search = () => {
   const delayedQuery = debounce(fetchResults, 400)
 
   useEffect(() => {
+    const inputRef = searchInput.current
+    console.log('searchTerm changed')
+    if (searchTerm.length === 0) {
+      setSearchResults(null)
+    }
     delayedQuery()
     return () => {
       delayedQuery.cancel
-      searchInput.current?.focus()
+      inputRef?.focus()
     }
   }, [searchTerm])
 
@@ -96,13 +102,13 @@ const Search = () => {
   }
 
   const ResultsList: React.FC = () => {
-    if (!searchResults) return
+    if (searchResults.length === 0) return
     return (
       <>
-        <ul className="block absolute top-[90px] left-px text-slate-400 bg-slate-200  rounded-lg">
+        <ul className="block absolute top-[78px] w-80 left-[155px] w-md max-h-[64vh] overflow-scroll text-slate-400 bg-slate-200 rounded-lg">
           {searchResults.map((result) => (
             <li
-              className="flex py-3 px-2 items-center text-sm overflow-hiddenw-full text-ellipsis border-0 border-b border-b-zinc-300 hover:border-l-cyan-500 border-l-2 hover:text-cyan5600  hover:cursor-pointer"
+              className="flex py-3 px-2 items-center text-sm overflow-hidden hover:text-cyan-500 text-ellipsis border-b border-b-zinc-300 hover:bg-slate-300 hover:cursor-pointer"
               key={result.id}
               onClick={() => handleResultSelect(result)}
             >

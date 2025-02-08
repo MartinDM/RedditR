@@ -16,21 +16,36 @@ import { getFeedContent } from '../utils'
 import { TParsedFeed } from '../utils'
 import { useMediaQuery } from 'usehooks-ts'
 import { TECollapse, TERipple } from 'tw-elements-react'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
-const NewsPanel = ({ subscription }: TSubscription) => {
-  const { url, display_name, community_icon } = subscription
+const NewsPanel = ({
+  subscription,
+  id,
+}): { subscription: TSubscription; id: string } => {
+  const { url, display_name, community_icon, isCollapsed } =
+    subscription as TSubscription
   const [content, setContent] = useState<TParsedFeed | null>(null)
   const [isPrivate, setIsPrivate] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState<boolean>(isCollapsed)
 
-  const matches = useMediaQuery('(min-width: 768px)')
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
+
+  const largeView = useMediaQuery('(min-width: 768px)')
 
   useEffect(() => {
     setIsLoading(true)
     getFeedContent(display_name)
       .then((res) => {
+        console.log(res)
         if (res.isPrivate) {
           setIsPrivate(true)
         }
@@ -45,8 +60,8 @@ const NewsPanel = ({ subscription }: TSubscription) => {
   }, [])
 
   useEffect(() => {
-    setIsCollapsed(false)
-  }, [matches])
+    setCollapsed((!largeView || collapsed) && !largeView)
+  }, [largeView])
 
   const handleRemoveSubscription = (display_name) => {
     const newSubs = subscriptions.filter(
@@ -74,33 +89,34 @@ const NewsPanel = ({ subscription }: TSubscription) => {
     )
   }
 
-  const toggleCollapse = () => setIsCollapsed(!isCollapsed)
+  const toggleCollapse = () => {
+    setCollapsed(!collapsed)
+  }
 
   return (
-    <div className="my-2 m-2 p-5 flex flex-col border-slate-300 bg-slate-100 border-2 rounded-xl">
-      <div className="flex justify-end items-center pb-3 ">
-        <div className="flex flex-end justify-between w-full">
-          <MdOutlineDragIndicator className="text-2xl cursor-grab" />
-          <div className="flex">
-            {!matches && (
-              <TERipple onClick={toggleCollapse} rippleColor="light">
-                {isCollapsed ? (
-                  <TiPlus className="text-2xl cursor-pointer" />
-                ) : (
-                  <TiMinus className="text-2xl cursor-pointer" />
-                )}
-              </TERipple>
-            )}
-
-            <IoMdClose
-              onClick={() => handleRemoveSubscription(display_name)}
-              className="ml-2 text-2xl cursor-pointer"
-            />
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="my-2 m-2 p-5 flex flex-col border-slate-300 bg-slate-100 border-2 rounded-xl cursor-grab"
+    >
+      <div className="flex justify-end items-center pb-3 cursor-grab">
+        <div className="flex flex-end justify-between w-full cursor-grab">
+          <MdOutlineDragIndicator className="text-2xl" />
+          <div className="flex cursor-grab">
+            {!largeView &&
+              (isCollapsed ? (
+                <TiPlus className="text-2xl cursor-pointer" />
+              ) : (
+                <TiMinus className="text-2xl cursor-pointer" />
+              ))}
+            <IoMdClose className="ml-2 text-2xl cursor-pointer" />
           </div>
         </div>
       </div>
 
-      <div className="flex justify-between items-center pb-3 border-b-2 border-cyan-400">
+      <div className="flex justify-between items-center pb-3 border-b-2 border-cyan-400 cursor-grab">
         {community_icon && (
           <Image
             src={community_icon}
@@ -110,7 +126,11 @@ const NewsPanel = ({ subscription }: TSubscription) => {
           />
         )}
 
-        <h1 className={'text-xl uppercase font-bold tracking-[-1px] pl-3'}>
+        <h1
+          className={
+            'text-xl uppercase font-bold tracking-[-1px] pl-3 cursor-grab'
+          }
+        >
           r/{display_name}
         </h1>
         <Link target="_blank" href={`https://www.reddit.com/r/${display_name}`}>
@@ -125,7 +145,7 @@ const NewsPanel = ({ subscription }: TSubscription) => {
         <TECollapse show={!isCollapsed}>
           <ul>
             {content?.articles?.map((article) => (
-              <li key={article.id} className="border-b-2 border-slate-400 py-4">
+              <li key={article.id} className="p-3 border-b-2 cursor-auto">
                 <p className="text-sm text-slate-500">{article.pubDate}</p>
                 <h2 className="font-semibold">{article.title}</h2>
                 {/* {article.image && (
@@ -136,14 +156,15 @@ const NewsPanel = ({ subscription }: TSubscription) => {
                   src={article.image}
                 />
               )} */}
-                <p className="text-slate-500 text-sm">{article?.author}</p>
+                <p className="text-slate-500 text-sm mb-3">{article?.author}</p>
                 <Link
-                  className="flex content-start gap-1 items-center mt-3"
+                  className="inline gap-1 uppercase items-center text-cyan-500 pb-3"
                   href={article.link}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Read more <LiaExternalLinkAltSolid className="text-m" />
+                  Read more{' '}
+                  <LiaExternalLinkAltSolid className="text-m inline" />
                 </Link>
               </li>
             ))}
