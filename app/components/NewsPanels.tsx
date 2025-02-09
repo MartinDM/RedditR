@@ -10,10 +10,12 @@ import {
   DndContext,
   closestCenter,
   KeyboardSensor,
+  MouseSensor,
   PointerSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
+
 import {
   arrayMove,
   SortableContext,
@@ -24,19 +26,15 @@ import {
 const NewsPanels = () => {
   const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  )
+  const sensors = useSensors()
 
-  const getSubPosition = (id) => subscriptions.findIndex((sub) => sub.id === id)
+  const getSubPosition = (id: string) =>
+    subscriptions.findIndex((sub) => sub.id === id)
 
   const handleDragEnd = (event) => {
     const { active, over } = event
     if (active.id !== over.id) {
-      setSubscriptions((subscriptions) => {
+      setSubscriptions(() => {
         const originalPos = getSubPosition(active.id)
         const newPos = getSubPosition(over.id)
         return arrayMove(subscriptions, originalPos, newPos)

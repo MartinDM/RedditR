@@ -87,8 +87,9 @@ export const getFeedContent = async (
     let articles: TArticle[] = []
 
     if (!isPrivate) {
-      articles = Array.from(document.querySelectorAll('entry')).map(
-        (entry) => ({
+      articles = Array.from(document.querySelectorAll('entry'))
+        .splice(0, 12) // get first 12 articles
+        .map((entry) => ({
           id: entry.querySelector('id')?.textContent || '',
           author: entry.querySelector('author > name')?.textContent || '',
           title: entry.querySelector('title')?.textContent || '',
@@ -101,8 +102,7 @@ export const getFeedContent = async (
           image: _extractImageFromContent(
             entry.querySelector('content')?.textContent || ''
           ),
-        })
-      )
+        }))
     }
     return { link, articles, isPrivate }
   } catch (error) {

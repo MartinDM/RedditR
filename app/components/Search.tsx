@@ -9,7 +9,6 @@ import useSearch from '../hooks/useSearch'
 
 export type TSubscription = {
   display_name: string
-  isCollapsed: boolean
   community_icon: string
   display_name_prefixed: string
   id: string
@@ -19,7 +18,7 @@ export type TSubscription = {
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [searchResults, setSearchResults] = useState<TSubscription[]>(null)
-  const [selections, setSelections] = useAtom<TSubscription[]>(selectionsAtom)
+  const [selections, setSelections] = useAtom(selectionsAtom)
 
   const searchInput = useRef(null)
 
@@ -70,6 +69,7 @@ const Search = () => {
       delayedQuery.cancel
       inputRef?.focus()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm])
 
   const handleClearSearch = () => {

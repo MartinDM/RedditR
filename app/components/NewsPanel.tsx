@@ -22,14 +22,17 @@ import { CSS } from '@dnd-kit/utilities'
 const NewsPanel = ({
   subscription,
   id,
-}): { subscription: TSubscription; id: string } => {
-  const { url, display_name, community_icon, isCollapsed } =
-    subscription as TSubscription
+}: {
+  subscription: TSubscription
+  id: string
+}): JSX.Element => {
+  const { url, display_name, community_icon } = subscription as TSubscription
   const [content, setContent] = useState<TParsedFeed | null>(null)
   const [isPrivate, setIsPrivate] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
-  const [collapsed, setCollapsed] = useState<boolean>(isCollapsed)
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false)
+  const [showingCount, setShowingCount] = useState<number>(null)
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id })
@@ -44,15 +47,15 @@ const NewsPanel = ({
   useEffect(() => {
     setIsLoading(true)
     getFeedContent(display_name)
-      .then((res) => {
-        console.log(res)
-        if (res.isPrivate) {
+      .then((content) => {
+        if (content.isPrivate) {
           setIsPrivate(true)
         }
-        setContent(res)
+        setContent(content)
+        setShowingCount(+content.articles.length)
       })
       .catch(() => {
-        console.log('error fetching feed content:', error)
+        console.log('error fetching feed content:', Error)
       })
       .finally(() => {
         setIsLoading(false)
@@ -60,10 +63,11 @@ const NewsPanel = ({
   }, [])
 
   useEffect(() => {
-    setCollapsed((!largeView || collapsed) && !largeView)
+    setIsCollapsed((!largeView || isCollapsed) && !largeView)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [largeView])
 
-  const handleRemoveSubscription = (display_name) => {
+  const handleRemoveSubscription = (e) => {
     const newSubs = subscriptions.filter(
       (sub) => sub.display_name !== display_name
     )
@@ -90,7 +94,7 @@ const NewsPanel = ({
   }
 
   const toggleCollapse = () => {
-    setCollapsed(!collapsed)
+    setIsCollapsed(!isCollapsed)
   }
 
   return (
@@ -107,11 +111,20 @@ const NewsPanel = ({
           <div className="flex cursor-grab">
             {!largeView &&
               (isCollapsed ? (
-                <TiPlus className="text-2xl cursor-pointer" />
+                <TiPlus
+                  className="text-2xl cursor-pointer"
+                  onMouseDown={toggleCollapse}
+                />
               ) : (
-                <TiMinus className="text-2xl cursor-pointer" />
+                <TiMinus
+                  className="text-2xl cursor-pointer"
+                  onMouseDown={toggleCollapse}
+                />
               ))}
-            <IoMdClose className="ml-2 text-2xl cursor-pointer" />
+            <IoMdClose
+              onMouseDown={handleRemoveSubscription}
+              className="ml-2 text-2xl cursor-pointer"
+            />
           </div>
         </div>
       </div>
@@ -137,18 +150,29 @@ const NewsPanel = ({
           <LiaExternalLinkAltSolid className="text-xl" />
         </Link>
       </div>
-      {isPrivate && <p>This feed is private 🧙 </p>}
+      {isPrivate && (
+        <p className="text-center my-5 text-md">This feed is private 🧙 </p>
+      )}
 
       {isLoading ? (
         <LoadingSkeleton />
       ) : (
-        <TECollapse show={!isCollapsed}>
-          <ul>
-            {content?.articles?.map((article) => (
-              <li key={article.id} className="p-3 border-b-2 cursor-auto">
-                <p className="text-sm text-slate-500">{article.pubDate}</p>
-                <h2 className="font-semibold">{article.title}</h2>
-                {/* {article.image && (
+        <>
+          {!isPrivate && (
+            <div className="flex flex-row mt-2 gap-3 items-center">
+              <span className="bg-slate-700 text-xs text-white rounded-lg uppercase p-2">
+                Hot 🌶️
+              </span>
+              <span className="text-slate-500"> {showingCount} articles</span>
+            </div>
+          )}
+          <TECollapse show={!isCollapsed}>
+            <ul>
+              {content?.articles?.map((article) => (
+                <li key={article.id} className="p-3 border-b-2 cursor-auto">
+                  <p className="text-sm text-slate-500">{article.pubDate}</p>
+                  <h2 className="font-semibold">{article.title}</h2>
+                  {/* {article.image && (
                 <Image
                   alt={article.title}
                   width={200}
@@ -156,20 +180,23 @@ const NewsPanel = ({
                   src={article.image}
                 />
               )} */}
-                <p className="text-slate-500 text-sm mb-3">{article?.author}</p>
-                <Link
-                  className="inline gap-1 uppercase items-center text-cyan-500 pb-3"
-                  href={article.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Read more{' '}
-                  <LiaExternalLinkAltSolid className="text-m inline" />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </TECollapse>
+                  <p className="text-slate-500 text-sm mb-3">
+                    {article?.author}
+                  </p>
+                  <Link
+                    className="inline gap-1 uppercase items-center text-cyan-500 pb-3"
+                    href={article.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Read more{' '}
+                    <LiaExternalLinkAltSolid className="text-m inline" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </TECollapse>
+        </>
       )}
     </div>
   )
