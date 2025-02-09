@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useEffect, useRef } from 'react'
-import { TRedditResult, TSubscription } from './Search'
+import { TSubscription } from './Search'
 import { RiCloseLargeLine } from 'react-icons/ri'
 import { useAtom, atom } from 'jotai'
 import { selectionsAtom, subscriptionsAtom } from '../state'
 
 type SelectionListProps = {
-  searchInputRef: HTMLInputElement
+  searchInputRef?: HTMLInputElement
 }
 
 const SelectedTags: React.FC<SelectionListProps> = ({ searchInputRef }) => {
@@ -22,11 +22,12 @@ const SelectedTags: React.FC<SelectionListProps> = ({ searchInputRef }) => {
   const handleSubscribe = () => {
     const newSubs = selections
     setSubscriptions((subs) => [...newSubs, ...subs])
-    searchInputRef.current.focus()
+    // TODO: Focus on input element after clearing
+    //searchInputRef.current.focus()
   }
 
   useEffect(() => {
-    searchInputRef.current.focus()
+    // searchInputRef.current.focus()
     setSelections([])
   }, [subscriptions])
 

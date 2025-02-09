@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "surge": "cp CNAME ./dist && cd ./dist && surge"
+    "surge": "cp CNAME ./dist && cd ./dist && surge",
+    "tslint": "npx tsc --noEmit"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

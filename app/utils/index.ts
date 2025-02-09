@@ -1,4 +1,5 @@
 import Parser from 'rss-parser'
+import { parse } from 'node-html-parser'
 
 export type TParsedFeed = {
   link: string

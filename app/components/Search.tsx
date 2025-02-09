@@ -20,7 +20,7 @@ const Search = () => {
   const [searchResults, setSearchResults] = useState<TSubscription[]>(null)
   const [selections, setSelections] = useAtom(selectionsAtom)
 
-  const searchInput = useRef(null)
+  //const searchInput = useRef<HTMLInputElement>(null)
 
   const fetchResults = async () => {
     if (!searchTerm.length) return
@@ -59,7 +59,7 @@ const Search = () => {
   const delayedQuery = debounce(fetchResults, 400)
 
   useEffect(() => {
-    const inputRef = searchInput.current
+    //const inputRef = searchInput.current
     console.log('searchTerm changed')
     if (searchTerm.length === 0) {
       setSearchResults(null)
@@ -67,7 +67,7 @@ const Search = () => {
     delayedQuery()
     return () => {
       delayedQuery.cancel
-      inputRef?.focus()
+      //inputRef?.focus()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm])
@@ -75,7 +75,7 @@ const Search = () => {
   const handleClearSearch = () => {
     setSearchTerm('')
     setSearchResults([])
-    searchInput.current.focus()
+    // searchInput.current.focus()
   }
 
   const handleSearch = (e) => {
@@ -150,7 +150,6 @@ const Search = () => {
   return (
     <>
       <input
-        ref={searchInput}
         type="text"
         id="search"
         onChange={handleSearch}
@@ -159,7 +158,7 @@ const Search = () => {
         value={searchTerm}
       />
       {searchResults && <ResultsList />}
-      <SelectedTags searchInputRef={searchInput} />
+      <SelectedTags />
     </>
   )
 }

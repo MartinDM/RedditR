@@ -45,11 +45,13 @@ const NewsPanels = () => {
   return (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <div className="grid gap-1 grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
-        <SortableContext items={subscriptions} sensors={sensors}>
-          {subscriptions?.map((sub) => (
-            <NewsPanel subscription={sub} id={sub.id} key={sub.id} />
-          ))}
-        </SortableContext>
+        {subscriptions && (
+          <SortableContext items={subscriptions}>
+            {subscriptions?.map((sub) => (
+              <NewsPanel subscription={sub} id={sub.id} key={sub.id} />
+            ))}
+          </SortableContext>
+        )}
       </div>
     </DndContext>
   )
