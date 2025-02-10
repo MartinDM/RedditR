@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "surge": "cp CNAME ./dist && cd ./dist && surge",
+    "publish": "vercel --prod",
     "tslint": "npx tsc --noEmit"
   },
   "dependencies": {
