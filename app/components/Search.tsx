@@ -22,9 +22,7 @@ const Search = () => {
   const [subscriptions, setSubscriptions] = useAtom (subscriptionsAtom)
   const searchInput = useRef<HTMLInputElement>(null)
 
-  useEffect(() => { 
-    console.log('ue');
-    console.log(searchInput);
+  useEffect(() => {
       searchInput.current.focus() 
   }, [searchTerm])
 
