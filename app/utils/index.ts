@@ -41,7 +41,7 @@ const _getFeedFromRss = async (
   const HOST =
     process.env.NODE_ENV === 'development'
       ? process.env.NEXT_PUBLIC_LOCAL_HOST
-      : 'http://reddit.com/r/'
+      : 'https://reddit.com/r/'
   const url = `${HOST}${subreddit}/.rss`
   let isPrivate = false
   try {
