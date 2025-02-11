@@ -141,10 +141,15 @@ const NewsPanel = ({
 
         <h1
           className={
-            'text-xl uppercase font-bold tracking-[-1px] pl-3 cursor-grab'
+            'text-xl uppercase font-bold tracking-[-1px] pl-3 cursor-pointer'
           }
         >
-          r/{display_name}
+          <Link
+            target="_blank"
+            href={`https://www.reddit.com/r/${display_name}`}
+          >
+            r/{display_name}
+          </Link>
         </h1>
         <Link target="_blank" href={`https://www.reddit.com/r/${display_name}`}>
           <LiaExternalLinkAltSolid className="text-xl" />
@@ -196,6 +201,13 @@ const NewsPanel = ({
               ))}
             </ul>
           </TECollapse>
+          <Link
+            target="_blank"
+            href={`https://www.reddit.com/r/${display_name}`}
+            className="flex justify-center flex-row bg-slate-300 text-slate-500 p-2 rounded-md gap-2"
+          >
+            Go to feed <LiaExternalLinkAltSolid className="text-xl" />
+          </Link>
         </>
       )}
     </div>

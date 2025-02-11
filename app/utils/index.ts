@@ -18,11 +18,6 @@ export type TArticle = {
   contentSnippet: string
 }
 
-let CORS_PROXY =
-  process.env.NODE_ENV === 'development'
-    ? process.env.NEXT_PUBLIC_LOCAL_HOST
-    : ''
-
 const _extractImageFromContent = (content: string): string | null => {
   const imgMatch = content.match(/<img.*?src="(.*?)"/)
   if (!imgMatch) return null
@@ -43,7 +38,11 @@ const _convertToFriendlyDate = (isoDate: string): string => {
 const _getFeedFromRss = async (
   subreddit: string
 ): Promise<{ xmlDoc: Document | null; isPrivate: boolean }> => {
-  const url = `${CORS_PROXY}${subreddit}/.rss`
+  const HOST =
+    process.env.NODE_ENV === 'development'
+      ? process.env.NEXT_PUBLIC_LOCAL_HOST
+      : 'http://reddit.com/r/'
+  const url = `${HOST}${subreddit}/.rss`
   let isPrivate = false
   try {
     const response = await fetch(url, {

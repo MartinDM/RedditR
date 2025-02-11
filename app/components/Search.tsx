@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useMemo, useState, useCallback } from 'react'
 import debounce from 'lodash.debounce'
 import SelectedTags from './SelectedTags'
 import { useAtom, atom } from 'jotai'
@@ -20,9 +20,7 @@ const Search = () => {
   const [searchResults, setSearchResults] = useState<TSubscription[]>(null)
   const [selections, setSelections] = useAtom(selectionsAtom)
 
-  //const searchInput = useRef<HTMLInputElement>(null)
-
-  const fetchResults = async () => {
+  const fetchResults = useCallback(async (searchTerm: string) => {
     if (!searchTerm.length) return
     await fetch(
       `https://www.reddit.com/subreddits/search.json?q=${searchTerm}&limit=10`
@@ -54,32 +52,35 @@ const Search = () => {
       .catch((err) => {
         console.error(err)
       })
+  }, [])
+
+  const debouncedSendRequest = useMemo(
+    () => debounce(fetchResults, 500),
+    [fetchResults]
+  )
+
+  // useEffect(() => {
+  //   //const inputRef = searchInput.current
+  //   console.log(searchTerm)
+  //   if (searchTerm.length === 0) {
+  //     console.log('null')
+  //     setSearchResults(null)
+  //   }
+  //   debouncedSendRequest()
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [searchTerm])
+
+  const handleSearch = (e) => {
+    const value = e.target.value
+    console.log(value)
+    setSearchTerm(value)
+    debouncedSendRequest(value)
   }
-
-  const delayedQuery = debounce(fetchResults, 400)
-
-  useEffect(() => {
-    //const inputRef = searchInput.current
-    console.log('searchTerm changed')
-    if (searchTerm.length === 0) {
-      setSearchResults(null)
-    }
-    delayedQuery()
-    return () => {
-      delayedQuery.cancel
-      //inputRef?.focus()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTerm])
 
   const handleClearSearch = () => {
     setSearchTerm('')
     setSearchResults([])
     // searchInput.current.focus()
-  }
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value)
   }
 
   const handleResultSelect = (result: TSubscription) => {
@@ -105,7 +106,7 @@ const Search = () => {
     if (searchResults.length === 0) return
     return (
       <>
-        <ul className="block absolute top-[78px] w-80 left-[155px] w-md max-h-[64vh] overflow-scroll text-slate-400 bg-slate-200 rounded-lg">
+        <ul className="block absolute top-[75px] w-80 left-[155px] w-md max-h-[64vh] overflow-scroll text-slate-400 bg-slate-200 rounded-lg rounded-t-none shadow-lg shadow-slate-500/80">
           {searchResults.map((result) => (
             <li
               className="flex py-3 px-2 items-center text-sm overflow-hidden hover:text-cyan-500 text-ellipsis border-b border-b-zinc-300 hover:bg-slate-300 hover:cursor-pointer"
