@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react'
 import { TSubscription } from './Search'
 import { RiCloseLargeLine } from 'react-icons/ri'
 import { useAtom, atom } from 'jotai'
-import { selectionsAtom, subscriptionsAtom } from '../state'
+import { selectionsAtom, subscriptionsAtom, searchAtom } from '../state'
 
 type SelectionListProps = {
   searchInputRef?: HTMLInputElement
@@ -13,6 +13,7 @@ type SelectionListProps = {
 const SelectedTags: React.FC<SelectionListProps> = ({ searchInputRef }) => {
   const [selections, setSelections] = useAtom(selectionsAtom)
   const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
+  const [searchTerm, setSearchTerm] = useAtom(searchAtom)
 
   const handleRemove = (id: string) => {
     const newSelections = selections?.filter((s) => s.id !== id)
@@ -22,14 +23,11 @@ const SelectedTags: React.FC<SelectionListProps> = ({ searchInputRef }) => {
   const handleSubscribe = () => {
     const newSubs = selections
     setSubscriptions((subs) => [...newSubs, ...subs])
-    // TODO: Focus on input element after clearing
-    //searchInputRef.current.focus()
+    setSelections([])
+    setSearchTerm('handle sub')
   }
 
-  useEffect(() => {
-    // searchInputRef.current.focus()
-    setSelections([])
-  }, [subscriptions])
+  useEffect(() => {}, [searchTerm])
 
   if (!selections || selections.length === 0) return null
 

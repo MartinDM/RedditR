@@ -63,13 +63,12 @@ const NewsPanel = ({
   }, [])
 
   useEffect(() => {
-    setIsCollapsed((!largeView || isCollapsed) && !largeView)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [largeView])
+    setIsCollapsed((!largeView || isCollapsed) && !largeView) 
+  }, [isCollapsed, largeView])
 
   const handleRemoveSubscription = (e) => {
     const newSubs = subscriptions.filter(
-      (sub) => sub.display_name !== display_name
+      (sub) => sub.display_name !== display_name,
     )
     setSubscriptions(newSubs)
   }
@@ -164,7 +163,7 @@ const NewsPanel = ({
       ) : (
         <>
           {!isPrivate && (
-            <div className="flex flex-row mt-2 gap-3 items-center">
+            <div className="flex flex-row my-2 gap-3 items-center">
               <span className="bg-slate-700 text-xs text-white rounded-lg uppercase p-2">
                 Hot 🌶️
               </span>
@@ -176,15 +175,7 @@ const NewsPanel = ({
               {content?.articles?.map((article) => (
                 <li key={article.id} className="p-3 border-b-2 cursor-auto">
                   <p className="text-sm text-slate-500">{article.pubDate}</p>
-                  <h2 className="font-semibold">{article.title}</h2>
-                  {/* {article.image && (
-                <Image
-                  alt={article.title}
-                  width={200}
-                  height={200}
-                  src={article.image}
-                />
-              )} */}
+                  <h2 className="font-semibold">{article.title}</h2> 
                   <p className="text-slate-500 text-sm mb-3">
                     {article?.author}
                   </p>
@@ -194,7 +185,7 @@ const NewsPanel = ({
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Read more{' '}
+                    Read more
                     <LiaExternalLinkAltSolid className="text-m inline" />
                   </Link>
                 </li>

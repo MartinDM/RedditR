@@ -33,7 +33,8 @@ const NewsPanels = () => {
 
   const handleDragEnd = (event) => {
     const { active, over } = event
-    if (subscriptions.length > 0 && active.id !== over.id) {
+    if (!subscriptions || !active || !over) return
+    if ( active.id !== over.id) {
       setSubscriptions(() => {
         const originalPos = getSubPosition(active.id)
         const newPos = getSubPosition(over.id)
@@ -45,7 +46,10 @@ const NewsPanels = () => {
   return (
     subscriptions && (
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <div className='grid gap-1 grid-cols-1 px-4 mt-2'>You have {subscriptions.length === 0 ? 'no' : subscriptions.length } subscriptions</div>
+        <div className="grid gap-1 grid-cols-1 px-4 mt-2">
+          You have {subscriptions.length === 0 ? 'no' : subscriptions.length}{' '}
+          subscriptions
+        </div>
         <div className="grid gap-1 grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
           {subscriptions && (
             <SortableContext items={subscriptions}>

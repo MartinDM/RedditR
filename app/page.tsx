@@ -7,16 +7,18 @@ import NewsPanel from './components/NewsPanel'
 import Search, { TSubscription } from './components/Search'
 import { TParsedFeed, TRedditFeed } from './types'
 import NewsPanels from './components/NewsPanels'
-import { subscriptionsAtom, selectionsAtom } from './state'
+import { subscriptionsAtom, selectionsAtom, searchAtom } from './state'
 
 export default function Page() {
   const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
   const [selections, setSelections] = useAtom(selectionsAtom)
+  const [searchTerm, setSearchTerm] = useAtom(searchAtom)
 
-  const handleClearLocalStorage = () => {
-    setSubscriptions([])
+  const handleClearSelections = () => {
+    setSelections([])
+    setSearchTerm('')
   }
-
+ 
   const hasSelections = !!selections.length
 
   return (
@@ -47,7 +49,7 @@ export default function Page() {
         <Search />
         {hasSelections && (
           <button
-            onClick={() => handleClearLocalStorage()}
+            onClick={() => handleClearSelections()}
             className="flex flex-columns text-zinc-500 text-m text-bold hover:text-zinc-700 p-2"
           >
             <svg

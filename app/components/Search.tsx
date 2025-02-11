@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useMemo, useState, useCallback } from 'react'
 import debounce from 'lodash.debounce'
 import SelectedTags from './SelectedTags'
 import { useAtom, atom } from 'jotai'
-import { selectionsAtom } from '../state'
+import { selectionsAtom, subscriptionsAtom } from '../state'
 import useSearch from '../hooks/useSearch'
 
 export type TSubscription = {
@@ -19,6 +19,14 @@ const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [searchResults, setSearchResults] = useState<TSubscription[]>(null)
   const [selections, setSelections] = useAtom(selectionsAtom)
+  const [subscriptions, setSubscriptions] = useAtom (subscriptionsAtom)
+  const searchInput = useRef<HTMLInputElement>(null)
+
+  useEffect(() => { 
+    console.log('ue');
+    console.log(searchInput);
+      searchInput.current.focus() 
+  }, [searchTerm])
 
   const fetchResults = useCallback(async (searchTerm: string) => {
     if (!searchTerm.length) return
@@ -59,28 +67,21 @@ const Search = () => {
     [fetchResults]
   )
 
-  // useEffect(() => {
-  //   //const inputRef = searchInput.current
-  //   console.log(searchTerm)
-  //   if (searchTerm.length === 0) {
-  //     console.log('null')
-  //     setSearchResults(null)
-  //   }
-  //   debouncedSendRequest()
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [searchTerm])
-
+  useEffect(() => {
+    if (searchTerm.length) {
+      searchInput.current.focus()
+    }
+  }, [searchTerm, subscriptions])
+ 
   const handleSearch = (e) => {
-    const value = e.target.value
-    console.log(value)
+    const value = e.target.value  
     setSearchTerm(value)
     debouncedSendRequest(value)
   }
 
   const handleClearSearch = () => {
     setSearchTerm('')
-    setSearchResults([])
-    // searchInput.current.focus()
+    setSearchResults([]) 
   }
 
   const handleResultSelect = (result: TSubscription) => {
@@ -106,7 +107,7 @@ const Search = () => {
     if (searchResults.length === 0) return
     return (
       <>
-        <ul className="block absolute top-[75px] w-80 left-[155px] w-md max-h-[64vh] overflow-scroll text-slate-400 bg-slate-200 rounded-lg rounded-t-none shadow-lg shadow-slate-500/80">
+        <ul className="block absolute top-[78px] w-80 left-[155px] w-md max-h-[64vh] overflow-auto text-slate-400 bg-slate-200 rounded-lg shadow-xl inset-shadow-sm">
           {searchResults.map((result) => (
             <li
               className="flex py-3 px-2 items-center text-sm overflow-hidden hover:text-cyan-500 text-ellipsis border-b border-b-zinc-300 hover:bg-slate-300 hover:cursor-pointer"
@@ -157,6 +158,8 @@ const Search = () => {
         className="p-4 text-slate-600 outline-none border-2 border-b-cyan-500 rounded-md block min-w-[200px] bg-slate-200"
         placeholder="Start typing..."
         value={searchTerm}
+        ref={searchInput}
+        autoFocus
       />
       {searchResults && <ResultsList />}
       <SelectedTags />
