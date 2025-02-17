@@ -63,12 +63,14 @@ const NewsPanel = ({
   }, [])
 
   useEffect(() => {
-    setIsCollapsed((!largeView || isCollapsed) && !largeView) 
-  }, [isCollapsed, largeView])
+    if (largeView && isCollapsed) {
+      setIsCollapsed(false)
+    }
+  }, [largeView, isCollapsed])
 
   const handleRemoveSubscription = (e) => {
     const newSubs = subscriptions.filter(
-      (sub) => sub.display_name !== display_name,
+      (sub) => sub.display_name !== display_name
     )
     setSubscriptions(newSubs)
   }
@@ -137,7 +139,6 @@ const NewsPanel = ({
             height={60}
           />
         )}
-
         <h1
           className={
             'text-xl uppercase font-bold tracking-[-1px] pl-3 cursor-pointer'
@@ -175,7 +176,7 @@ const NewsPanel = ({
               {content?.articles?.map((article) => (
                 <li key={article.id} className="p-3 border-b-2 cursor-auto">
                   <p className="text-sm text-slate-500">{article.pubDate}</p>
-                  <h2 className="font-semibold">{article.title}</h2> 
+                  <h2 className="font-semibold">{article.title}</h2>
                   <p className="text-slate-500 text-sm mb-3">
                     {article?.author}
                   </p>

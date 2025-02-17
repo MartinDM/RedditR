@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { parse } from 'node-html-parser'
 import { useAtom } from 'jotai'
 import NewsPanel from './components/NewsPanel'
+import SelectedTags from './components/SelectedTags'
 import Search, { TSubscription } from './components/Search'
 import { TParsedFeed, TRedditFeed } from './types'
 import NewsPanels from './components/NewsPanels'
@@ -46,8 +47,11 @@ export default function Page() {
             />
           </svg>
         </header>
-        <Search />
-        {hasSelections && (
+        <Search /> 
+      </div> 
+      <SelectedTags />  
+      {hasSelections && (
+      <div className="p-2 flex gap-2 items-start flex-row width-full bg-slate-300">
           <button
             onClick={() => handleClearSelections()}
             className="flex flex-columns text-zinc-500 text-m text-bold hover:text-zinc-700 p-2"
@@ -68,8 +72,8 @@ export default function Page() {
             </svg>
             Clear selections
           </button>
+        </div>
         )}
-      </div>
       <NewsPanels />
     </div>
   )
