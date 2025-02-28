@@ -13,17 +13,12 @@
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
-    "@heroicons/react": "^2.2.0",
-    "@preline/combobox": "^2.6.0",
     "@tailwindcss/typography": "^0.5.15",
     "@types/lodash.debounce": "^4.0.9",
-    "@types/node": "20.6.2",
     "@types/react": "18.2.22",
-    "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
-    "himalaya": "^1.1.0",
     "jotai": "^2.10.3",
     "lodash.debounce": "^4.0.8",
     "next": "13.5.1",
@@ -40,5 +35,8 @@
     "typescript": "5.2.2",
     "usehooks-ts": "^3.1.0",
     "xmldom": "^0.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.13.5"
   }
 }
