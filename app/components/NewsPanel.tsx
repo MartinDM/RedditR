@@ -70,7 +70,7 @@ const NewsPanel = ({
 
   const handleRemoveSubscription = (e) => {
     const newSubs = subscriptions.filter(
-      (sub) => sub.display_name !== display_name
+      (sub) => sub.display_name !== display_name,
     )
     setSubscriptions(newSubs)
   }

@@ -18,17 +18,17 @@ const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [searchResults, setSearchResults] = useState<TSubscription[]>(null)
   const [selections, setSelections] = useAtom(selectionsAtom)
-  const [subscriptions, setSubscriptions] = useAtom (subscriptionsAtom)
+  const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
   const searchInput = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-      searchInput.current.focus() 
+    searchInput.current.focus()
   }, [searchTerm])
 
   const fetchResults = useCallback(async (searchTerm: string) => {
     if (!searchTerm.length) return
     await fetch(
-      `https://www.reddit.com/subreddits/search.json?q=${searchTerm}&limit=10`
+      `https://www.reddit.com/subreddits/search.json?q=${searchTerm}&limit=10`,
     )
       .then((response) => {
         return response.json()
@@ -61,7 +61,7 @@ const Search = () => {
 
   const debouncedSendRequest = useMemo(
     () => debounce(fetchResults, 500),
-    [fetchResults]
+    [fetchResults],
   )
 
   useEffect(() => {
@@ -69,16 +69,16 @@ const Search = () => {
       searchInput.current.focus()
     }
   }, [searchTerm, subscriptions])
- 
+
   const handleSearch = (e) => {
-    const value = e.target.value  
+    const value = e.target.value
     setSearchTerm(value)
     debouncedSendRequest(value)
   }
 
   const handleClearSearch = () => {
     setSearchTerm('')
-    setSearchResults([]) 
+    setSearchResults([])
   }
 
   const handleResultSelect = (result: TSubscription) => {

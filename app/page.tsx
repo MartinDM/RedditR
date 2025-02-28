@@ -19,7 +19,7 @@ export default function Page() {
     setSelections([])
     setSearchTerm('')
   }
- 
+
   const hasSelections = !!selections.length
 
   return (
@@ -47,11 +47,11 @@ export default function Page() {
             />
           </svg>
         </header>
-        <Search /> 
-      </div> 
-      <SelectedTags />  
+        <Search />
+      </div>
+      <SelectedTags />
       {hasSelections && (
-      <div className="p-2 flex gap-2 items-start flex-row width-full bg-slate-300">
+        <div className="p-2 flex gap-2 items-start flex-row width-full bg-slate-300">
           <button
             onClick={() => handleClearSelections()}
             className="flex flex-columns text-zinc-500 text-m text-bold hover:text-zinc-700 p-2"
@@ -73,7 +73,7 @@ export default function Page() {
             Clear selections
           </button>
         </div>
-        )}
+      )}
       <NewsPanels />
     </div>
   )
