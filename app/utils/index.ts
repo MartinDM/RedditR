@@ -36,7 +36,7 @@ const _convertToFriendlyDate = (isoDate: string): string => {
 }
 
 const _getFeedFromRss = async (
-  subreddit: string,
+  subreddit: string
 ): Promise<{ xmlDoc: Document | null; isPrivate: boolean }> => {
   const HOST =
     process.env.NODE_ENV === 'development'
@@ -44,23 +44,28 @@ const _getFeedFromRss = async (
       : 'https://reddit.com/r/'
   const url = `${HOST}${subreddit}/.rss`
   let isPrivate = false
+
   try {
     const response = await fetch(url, {
       method: 'GET',
+      redirect: 'manual',
       headers: {
         'Content-Type': 'application/xml',
       },
     })
-    if (!response.ok && response.status !== 403) {
-      throw new Error(`HTTP error, ${response.status}`)
+
+    if (!response.ok) {
+      if (response.status === 403) {
+        isPrivate = true
+      } else {
+        throw new Error(`HTTP error, ${response.status}`)
+      }
     }
 
     const text = await response.text()
     const parser = new DOMParser()
     const xmlDoc = parser.parseFromString(text, 'application/xml')
-    if (response.status === 403) {
-      isPrivate = true
-    }
+
     return { xmlDoc, isPrivate }
   } catch (error) {
     console.error('Error fetching the RSS feed:', error)
@@ -69,7 +74,7 @@ const _getFeedFromRss = async (
 }
 
 export const getFeedContent = async (
-  subreddit: string,
+  subreddit: string
 ): Promise<TParsedFeed | null> => {
   try {
     const data = await _getFeedFromRss(subreddit)
@@ -96,11 +101,11 @@ export const getFeedContent = async (
           link: entry.querySelector('link')?.getAttribute('href') || '',
           content: entry.querySelector('content')?.textContent || '',
           pubDate: _convertToFriendlyDate(
-            entry.querySelector('published')?.textContent || '',
+            entry.querySelector('published')?.textContent || ''
           ),
           contentSnippet: entry.querySelector('summary')?.textContent || '',
           image: _extractImageFromContent(
-            entry.querySelector('content')?.textContent || '',
+            entry.querySelector('content')?.textContent || ''
           ),
         }))
     }
