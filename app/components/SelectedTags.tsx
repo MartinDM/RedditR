@@ -33,7 +33,7 @@ const SelectedTags: React.FC<SelectionListProps> = ({ searchInputRef }) => {
   if (!selections || selections.length === 0) return null
 
   return (
-    <div className="p-4 items-center justify-start flex gap-2 items-start flex-row width-full bg-slate-300">
+    <div className="p-4 items-center justify-start flex gap-2 items-start flex-row w-full bg-slate-300">
       <div className="flex items-center flex-wrap gap-1">
         {selections.map((selection) => (
           <div
@@ -61,7 +61,7 @@ const SelectedTags: React.FC<SelectionListProps> = ({ searchInputRef }) => {
         onClick={handleSubscribe}
         className="flex items-center gap-2 bg-gradient-to-b from-bg-slate-200 border-[1px] border-zinc-500 rounded-[20px] p-1 px-2 hover:bg-slate-800 hover:text-white"
       >
-        <span className="text-xs block py-2 px-4">Subscribe</span>
+        <span className="text-xs block py-2 px-4 cursor-pointer">Subscribe</span>
         <IoAddCircle className="p4 text-2xl cursor-pointer ml-auto" />
       </button>
     </div>

@@ -104,7 +104,7 @@ const Search = () => {
     if (searchResults.length === 0) return
     return (
       <>
-        <ul className="block absolute z-[1] top-[78px] w-80 left-[155px] w-md max-h-[64vh] overflow-auto text-slate-400 bg-slate-200 rounded-lg shadow-xl inset-shadow-sm">
+        <ul className="block absolute z-[1] top-[78px]  left-[155px] w-md max-h-[64vh] overflow-auto text-slate-400 bg-slate-200 rounded-lg shadow-xl inset-shadow-sm">
           {searchResults.map((result) => (
             <li
               className="flex py-3 px-2 items-center text-sm overflow-hidden hover:text-cyan-500 text-ellipsis border-b border-b-zinc-300 hover:bg-slate-300 hover:cursor-pointer"
@@ -152,7 +152,7 @@ const Search = () => {
         type="text"
         id="search"
         onChange={handleSearch}
-        className="p-4 pe-8 text-slate-600 outline-none border-2 border-b-cyan-500 rounded-md block min-w-[200px] bg-slate-200"
+        className="p-4 pe-8 text-slate-600 outline-none border-0 rounded-md block min-w-[200px] bg-slate-200"
         placeholder="Start typing..."
         value={searchTerm}
         ref={searchInput}

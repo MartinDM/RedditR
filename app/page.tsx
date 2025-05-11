@@ -9,6 +9,7 @@ import Search, { TSubscription } from './components/Search'
 import { TParsedFeed, TRedditFeed } from './types'
 import NewsPanels from './components/NewsPanels'
 import { subscriptionsAtom, selectionsAtom, searchAtom } from './state'
+import './globals.css'
 
 export default function Page() {
   const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
@@ -24,7 +25,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-col">
-      <div className="p-4 flex gap-4 items-center flex-row width-full bg-slate-300">
+      <div className="p-4 flex gap-4 items-center flex-row w-full bg-slate-300">
         <header className="font-bold gap-6 content-center align-center justify-center flex items-center">
           <h1 className="text-cyan-500">RedditR</h1>
           <svg
@@ -51,10 +52,10 @@ export default function Page() {
       </div>
       <SelectedTags />
       {hasSelections && (
-        <div className="p-2 flex gap-2 items-start flex-row width-full bg-slate-300">
+        <div className="p-2 flex gap-2 items-start flex-row w-full bg-slate-300">
           <button
             onClick={() => handleClearSelections()}
-            className="flex flex-columns text-zinc-500 text-m text-bold hover:text-zinc-700 p-2"
+            className="flex flex-columns text-zinc-500 text-m text-bold hover:text-zinc-700 p-2 cursor-pointer"
           >
             <svg
               className="w-6 mr-3"

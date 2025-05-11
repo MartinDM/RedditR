@@ -26,6 +26,7 @@ const extractArticlesFromXML = (xmlDoc: Document) => {
   const linkElement = xmlDoc.getElementsByTagName('link')[0]
   const link =
     linkElement.getAttribute('href')?.split('/').slice(0, -1).join('/') || ''
+
   const articles = Array.from(entries).map((entry) => ({
     title: entry.getElementsByTagName('title')[0]?.textContent || '',
     id: entry.getElementsByTagName('id')[0]?.textContent || '',

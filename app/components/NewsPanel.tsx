@@ -184,23 +184,27 @@ const NewsPanel = ({
           <TECollapse show={!isCollapsed}>
             <ul>
               {content?.articles?.map((article) => {
-                const { id, pubDate, content, link, title, author } = article
+                const { pubDate, content, link, title, author } = article
                 const formattedDate = formatDate(pubDate)
                 return (
-                  <li key={article.id} className="p-3 border-b-2 cursor-auto">
-                    <p className="text-sm text-right mb-2 text-slate-500">{formattedDate}</p>
+                  <li key={article.id} className="p-3 border-b-1 cursor-auto">
+                    <p className="text-sm text-right mb-2 text-slate-500">
+                      {formattedDate}
+                    </p>
                     <h2 className="font-semibold">
-                    <Link
-                      href={link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >{title}
-                    </Link></h2>
-                    <p className="text-slate-500 text-sm mb-3">🧑‍🦳 {author}</p> 
+                      <Link
+                        href={link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {title}
+                      </Link>
+                    </h2>
+                    <p className="text-slate-500 text-sm mb-3">🧑‍🦳 {author}</p>
                     <p className="text-slate-500 text-sm mb-3">
                       {content?.length > 200
                         ? content.slice(0, 200) + '...'
-                        : content}
+                        : content} 
                     </p>
                     <Link
                       className="inline gap-1 text-sm uppercase items-center text-cyan-500 pb-3"
