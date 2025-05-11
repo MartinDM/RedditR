@@ -12,7 +12,7 @@ import { RingLoader } from 'react-spinners'
 import { TiMinus, TiPlus } from 'react-icons/ti'
 import { IoMdClose } from 'react-icons/io'
 import { MdOutlineDragIndicator } from 'react-icons/md'
-import { getFeedContent } from '../utils'
+import { getFeedFromRss } from '../utils'
 import { TParsedFeed } from '../utils'
 import { useMediaQuery } from 'usehooks-ts'
 import { TECollapse, TERipple } from 'tw-elements-react'
@@ -46,21 +46,21 @@ const NewsPanel = ({
 
   useEffect(() => {
     setIsLoading(true)
-    getFeedContent(display_name)
-      .then((content) => {
-        if (content.isPrivate) {
+    getFeedFromRss(display_name)
+      .then((response) => {
+        if (response?.isPrivate) {
           setIsPrivate(true)
         }
-        setContent(content)
-        setShowingCount(+content.articles.length)
+        setContent(response)
+        setShowingCount(+response?.articles?.length)
       })
-      .catch(() => {
-        console.log('error fetching feed content:', Error)
+      .catch((e) => {
+        console.error('Error fetching feed content:', e)
       })
       .finally(() => {
         setIsLoading(false)
       })
-  }, [])
+  }, [display_name])
 
   useEffect(() => {
     if (largeView && isCollapsed) {
@@ -70,7 +70,7 @@ const NewsPanel = ({
 
   const handleRemoveSubscription = (e) => {
     const newSubs = subscriptions.filter(
-      (sub) => sub.display_name !== display_name,
+      (sub) => sub.display_name !== display_name
     )
     setSubscriptions(newSubs)
   }
@@ -96,6 +96,16 @@ const NewsPanel = ({
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed)
+  }
+
+  const formatDate = (xmlDate: string): string => {
+    const date = new Date(xmlDate)
+    const options: Intl.DateTimeFormatOptions = {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }
+    return date.toLocaleDateString('en-GB', options)
   }
 
   return (
@@ -173,30 +183,43 @@ const NewsPanel = ({
           )}
           <TECollapse show={!isCollapsed}>
             <ul>
-              {content?.articles?.map((article) => (
-                <li key={article.id} className="p-3 border-b-2 cursor-auto">
-                  <p className="text-sm text-slate-500">{article.pubDate}</p>
-                  <h2 className="font-semibold">{article.title}</h2>
-                  <p className="text-slate-500 text-sm mb-3">
-                    {article?.author}
-                  </p>
-                  <Link
-                    className="inline gap-1 uppercase items-center text-cyan-500 pb-3"
-                    href={article.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Read more
-                    <LiaExternalLinkAltSolid className="text-m inline" />
-                  </Link>
-                </li>
-              ))}
+              {content?.articles?.map((article) => {
+                const { id, pubDate, content, link, title, author } = article
+                const formattedDate = formatDate(pubDate)
+                return (
+                  <li key={article.id} className="p-3 border-b-2 cursor-auto">
+                    <p className="text-sm text-right mb-2 text-slate-500">{formattedDate}</p>
+                    <h2 className="font-semibold">
+                    <Link
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >{title}
+                    </Link></h2>
+                    <p className="text-slate-500 text-sm mb-3">🧑‍🦳 {author}</p> 
+                    <p className="text-slate-500 text-sm mb-3">
+                      {content?.length > 200
+                        ? content.slice(0, 200) + '...'
+                        : content}
+                    </p>
+                    <Link
+                      className="inline gap-1 text-sm uppercase items-center text-cyan-500 pb-3"
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Read more
+                      <LiaExternalLinkAltSolid className="text-m inline" />
+                    </Link>
+                  </li>
+                )
+              })}
             </ul>
           </TECollapse>
           <Link
             target="_blank"
             href={`https://www.reddit.com/r/${display_name}`}
-            className="flex justify-center flex-row bg-slate-300 text-slate-500 p-2 rounded-md gap-2"
+            className="flex justify-center flex-row bg-slate-300 text-slate-500 mt-5 p-2 rounded-md gap-2"
           >
             Go to feed <LiaExternalLinkAltSolid className="text-xl" />
           </Link>
