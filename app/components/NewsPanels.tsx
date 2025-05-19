@@ -1,33 +1,16 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import NewsPanel from '../components/NewsPanel'
 import { useAtom } from 'jotai'
-import { TSubscription } from '../components/Search'
 import { subscriptionsAtom } from '../state'
 
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  MouseSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core'
+import { DndContext, closestCenter, useSensors } from '@dnd-kit/core'
 
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
+import { arrayMove, SortableContext } from '@dnd-kit/sortable'
 
 const NewsPanels = () => {
   const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
-
-  const sensors = useSensors()
-
   const getSubPosition = (id: string) =>
     subscriptions.findIndex((sub) => sub.id === id)
 

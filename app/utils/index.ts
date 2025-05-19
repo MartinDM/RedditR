@@ -1,21 +1,9 @@
-import Parser from 'rss-parser'
 import { parse } from 'node-html-parser'
+import { Article } from '../api/proxy/route'
 
 export type TParsedFeed = {
-  link: string
   articles: TArticle[]
   isPrivate?: boolean
-}
-
-export type TArticle = {
-  id: string
-  author: string
-  image: string
-  title: string
-  link: string
-  content: string
-  pubDate?: string
-  contentSnippet: string
 }
 
 const extractImageFromContent = (content: string): string | null => {
@@ -25,10 +13,12 @@ const extractImageFromContent = (content: string): string | null => {
 }
 
 export const getFeedFromRss = async (
-  subreddit: string
-): Promise<{ xmlDoc: Document | null; isPrivate: boolean }> => {
-  let xmlDoc: Document | null = null
-  let isPrivate = false
+  subreddit: string,
+): Promise<{
+  xmlDoc: Article[]
+  articles: Article[]
+  isPrivate: boolean
+}> => {
   const url = `/api/proxy?url=https://www.reddit.com/r/${subreddit}/.rss`
   const response = await fetch(url, {
     method: 'GET',
@@ -38,14 +28,15 @@ export const getFeedFromRss = async (
     },
   })
 
-  if (!response.status) {
+  if (!response.ok) {
     throw new Error('Failed to fetch RSS feed')
   } else {
-    return response.json()
+    const data: TParsedFeed = await response.json()
+    return { xmlDoc: data, isPrivate: !!data.isPrivate }
   }
 }
 
-export const getImageFromPostHTML = (htmlString: string) => {
+export const getImageFromPostHTML = (htmlString: string): string => {
   const img = parse(htmlString).getElementsByTagName('img')[0]
   return img
     ? img?.rawAttrs

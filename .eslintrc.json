@@ -1,6 +1,9 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "no-unused-vars": ["warn", { "args": "after-used", "ignoreRestSiblings": true }]
+    "no-unused-vars": [
+      "warn",
+      { "args": "after-used", "ignoreRestSiblings": true }
+    ]
   }
 }

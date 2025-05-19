@@ -1,33 +1,33 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { TRedditArticle, TRedditPost } from '../types'
 import { useAtom } from 'jotai'
 import Image from 'next/image'
 import Link from 'next/link'
 import { subscriptionsAtom } from '../state'
 import { TSubscription } from './Search'
 import { LiaExternalLinkAltSolid } from 'react-icons/lia'
-import { RingLoader } from 'react-spinners'
 import { TiMinus, TiPlus } from 'react-icons/ti'
 import { IoMdClose } from 'react-icons/io'
 import { MdOutlineDragIndicator } from 'react-icons/md'
 import { getFeedFromRss } from '../utils'
-import { TParsedFeed } from '../utils'
 import { useMediaQuery } from 'usehooks-ts'
-import { TECollapse, TERipple } from 'tw-elements-react'
+import { TECollapse } from 'tw-elements-react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { type Article } from '../api/proxy/route'
+
+type TNewsPanelProps = {
+  subscription: TSubscription
+  id: string
+}
 
 const NewsPanel = ({
   subscription,
   id,
-}: {
-  subscription: TSubscription
-  id: string
-}): JSX.Element => {
-  const { url, display_name, community_icon } = subscription as TSubscription
-  const [content, setContent] = useState<TParsedFeed | null>(null)
+}: TNewsPanelProps): React.ReactElement => {
+  const { display_name, community_icon } = subscription as TSubscription
+  const [content, setContent] = useState<Article>(null)
   const [isPrivate, setIsPrivate] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
@@ -51,8 +51,9 @@ const NewsPanel = ({
         if (response?.isPrivate) {
           setIsPrivate(true)
         }
-        setContent(response)
-        setShowingCount(+response?.articles?.length)
+        const articles = response?.xmlDoc?.articles
+        setContent(articles)
+        setShowingCount(response?.xmlDoc?.articles?.length)
       })
       .catch((e) => {
         console.error('Error fetching feed content:', e)
@@ -70,7 +71,7 @@ const NewsPanel = ({
 
   const handleRemoveSubscription = (e) => {
     const newSubs = subscriptions.filter(
-      (sub) => sub.display_name !== display_name
+      (sub) => sub.display_name !== display_name,
     )
     setSubscriptions(newSubs)
   }
@@ -183,8 +184,9 @@ const NewsPanel = ({
           )}
           <TECollapse show={!isCollapsed}>
             <ul>
-              {content?.articles?.map((article) => {
+              {content?.map((article) => {
                 const { pubDate, content, link, title, author } = article
+
                 const formattedDate = formatDate(pubDate)
                 return (
                   <li key={article.id} className="p-3 border-b-1 cursor-auto">
@@ -202,9 +204,11 @@ const NewsPanel = ({
                     </h2>
                     <p className="text-slate-500 text-sm mb-3">🧑‍🦳 {author}</p>
                     <p className="text-slate-500 text-sm mb-3">
-                      {content?.length > 200
-                        ? content.slice(0, 200) + '...'
-                        : content} 
+                      {content?.includes('/u/')
+                        ? ''
+                        : content?.length > 200
+                          ? content.slice(0, 200) + '...'
+                          : content}
                     </p>
                     <Link
                       className="inline gap-1 text-sm uppercase items-center text-cyan-500 pb-3"
@@ -220,13 +224,15 @@ const NewsPanel = ({
               })}
             </ul>
           </TECollapse>
-          <Link
-            target="_blank"
-            href={`https://www.reddit.com/r/${display_name}`}
-            className="flex justify-center flex-row bg-slate-300 text-slate-500 mt-5 p-2 rounded-md gap-2"
-          >
-            Go to feed <LiaExternalLinkAltSolid className="text-xl" />
-          </Link>
+          <div className="mt-auto">
+            <Link
+              target="_blank"
+              href={`https://www.reddit.com/r/${display_name}`}
+              className="flex justify-center flex-row bg-slate-300 text-slate-500 mt-5 p-2 rounded-md gap-2"
+            >
+              Go to feed <LiaExternalLinkAltSolid className="text-xl" />
+            </Link>
+          </div>
         </>
       )}
     </div>

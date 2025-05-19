@@ -1,18 +1,13 @@
 'use client'
 
-import { useEffect } from 'react'
-import { parse } from 'node-html-parser'
 import { useAtom } from 'jotai'
-import NewsPanel from './components/NewsPanel'
 import SelectedTags from './components/SelectedTags'
-import Search, { TSubscription } from './components/Search'
-import { TParsedFeed, TRedditFeed } from './types'
+import Search from './components/Search'
 import NewsPanels from './components/NewsPanels'
-import { subscriptionsAtom, selectionsAtom, searchAtom } from './state'
+import { selectionsAtom, searchAtom } from './state'
 import './globals.css'
 
 export default function Page() {
-  const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
   const [selections, setSelections] = useAtom(selectionsAtom)
   const [searchTerm, setSearchTerm] = useAtom(searchAtom)
 

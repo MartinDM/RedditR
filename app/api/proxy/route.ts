@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { DOMParser } from 'xmldom'
 
-type Article = {
+export type Article = {
   id: string
   title: string
   link: string
   pubDate: string
+  content: string
+  author: string
+}
+
+export type ParsedFeed = {
+  articles: Article[]
+  link: string
 }
 
 const getTextFromContentHtml = (html: string) => {
@@ -15,7 +22,7 @@ const getTextFromContentHtml = (html: string) => {
   return text
 }
 
-const extractArticlesFromXML = (xmlDoc: Document) => {
+const extractArticlesFromXML = (xmlDoc: Document): ParsedFeed => {
   const entries = xmlDoc.getElementsByTagName('entry')
   if (!entries.length) {
     return NextResponse.json(
@@ -26,8 +33,7 @@ const extractArticlesFromXML = (xmlDoc: Document) => {
   const linkElement = xmlDoc.getElementsByTagName('link')[0]
   const link =
     linkElement.getAttribute('href')?.split('/').slice(0, -1).join('/') || ''
-
-  const articles = Array.from(entries).map((entry) => ({
+  const articles: Article[] = Array.from(entries).map((entry) => ({
     title: entry.getElementsByTagName('title')[0]?.textContent || '',
     id: entry.getElementsByTagName('id')[0]?.textContent || '',
     content: getTextFromContentHtml(
@@ -45,7 +51,7 @@ const extractArticlesFromXML = (xmlDoc: Document) => {
   }
 }
 
-export async function GET(request: NextRequest): NextResponse {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   const targetUrl = request.nextUrl.searchParams.get('url')
   if (!targetUrl) {
     return NextResponse.json(

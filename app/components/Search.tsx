@@ -2,9 +2,8 @@
 
 import React, { useEffect, useRef, useMemo, useState, useCallback } from 'react'
 import debounce from 'lodash.debounce'
-import { useAtom, atom } from 'jotai'
+import { useAtom } from 'jotai'
 import { selectionsAtom, subscriptionsAtom } from '../state'
-import useSearch from '../hooks/useSearch'
 
 export type TSubscription = {
   display_name: string

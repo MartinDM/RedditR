@@ -18,14 +18,6 @@ export type TParsedFeed = {
   image: string
 }
 
-export type TRedditArticle = {
-  id: string
-  imgSrc: string
-  pubDate: DateString
-  title: string
-  link: string
-}
-
 export type TRedditFeed = {
   feedUrl: string
   items: TRedditPost[]
