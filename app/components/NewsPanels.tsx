@@ -5,7 +5,7 @@ import NewsPanel from '../components/NewsPanel'
 import { useAtom } from 'jotai'
 import { subscriptionsAtom } from '../state'
 
-import { DndContext, closestCenter, useSensors } from '@dnd-kit/core'
+import { DndContext, closestCenter } from '@dnd-kit/core'
 
 import { arrayMove, SortableContext } from '@dnd-kit/sortable'
 

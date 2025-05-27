@@ -22,7 +22,9 @@ const getTextFromContentHtml = (html: string) => {
   return text
 }
 
-const extractArticlesFromXML = (xmlDoc: Document): ParsedFeed => {
+const extractArticlesFromXML = (
+  xmlDoc: Document
+): ParsedFeed | NextResponse => {
   const entries = xmlDoc.getElementsByTagName('entry')
   if (!entries.length) {
     return NextResponse.json(

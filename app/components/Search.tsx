@@ -17,7 +17,7 @@ const Search = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [searchResults, setSearchResults] = useState<TSubscription[]>(null)
   const [selections, setSelections] = useAtom(selectionsAtom)
-  const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
+  const [subscriptions] = useAtom(subscriptionsAtom)
   const searchInput = useRef<HTMLInputElement>(null)
 
   useEffect(() => {

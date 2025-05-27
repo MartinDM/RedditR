@@ -12,7 +12,8 @@ type SelectionListProps = {
 
 const SelectedTags: React.FC<SelectionListProps> = () => {
   const [selections, setSelections] = useAtom(selectionsAtom)
-  const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
+
+  const [, setSubscriptions] = useAtom(subscriptionsAtom)
   const [searchTerm, setSearchTerm] = useAtom(searchAtom)
 
   const handleRemove = (id: string) => {

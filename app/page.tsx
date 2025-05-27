@@ -9,7 +9,7 @@ import './globals.css'
 
 export default function Page() {
   const [selections, setSelections] = useAtom(selectionsAtom)
-  const [searchTerm, setSearchTerm] = useAtom(searchAtom)
+  const [, setSearchTerm] = useAtom(searchAtom)
 
   const handleClearSelections = () => {
     setSelections([])

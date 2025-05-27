@@ -16,7 +16,7 @@ import { TECollapse } from 'tw-elements-react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { type Article } from '../api/proxy/route'
-
+ 
 type TNewsPanelProps = {
   subscription: TSubscription
   id: string
@@ -27,7 +27,7 @@ const NewsPanel = ({
   id,
 }: TNewsPanelProps): React.ReactElement => {
   const { display_name, community_icon } = subscription as TSubscription
-  const [content, setContent] = useState<Article>(null)
+  const [content, setContent] = useState<Article[]>(null)
   const [isPrivate, setIsPrivate] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
@@ -51,7 +51,7 @@ const NewsPanel = ({
         if (response?.isPrivate) {
           setIsPrivate(true)
         }
-        const articles = response?.xmlDoc?.articles
+        const articles = response?.xmlDoc?.articles as Article[]
         setContent(articles)
         setShowingCount(response?.xmlDoc?.articles?.length)
       })
@@ -69,9 +69,9 @@ const NewsPanel = ({
     }
   }, [largeView, isCollapsed])
 
-  const handleRemoveSubscription = (e) => {
+  const handleRemoveSubscription = () => {
     const newSubs = subscriptions.filter(
-      (sub) => sub.display_name !== display_name,
+      (sub) => sub.display_name !== display_name
     )
     setSubscriptions(newSubs)
   }
@@ -113,59 +113,65 @@ const NewsPanel = ({
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
-      className="my-2 m-2 p-5 flex flex-col border-slate-300 bg-slate-100 border-2 rounded-xl cursor-grab"
+      className="my-2 m-2 p-5 flex flex-col border-slate-300 bg-slate-100 border-2 rounded-xl"
     >
-      <div className="flex justify-end items-center pb-3 cursor-grab">
-        <div className="flex flex-end justify-between w-full cursor-grab">
-          <MdOutlineDragIndicator className="text-2xl" />
-          <div className="flex cursor-grab">
-            {!largeView &&
-              (isCollapsed ? (
-                <TiPlus
-                  className="text-2xl cursor-pointer"
-                  onMouseDown={toggleCollapse}
-                />
-              ) : (
-                <TiMinus
-                  className="text-2xl cursor-pointer"
-                  onMouseDown={toggleCollapse}
-                />
-              ))}
-            <IoMdClose
-              onMouseDown={handleRemoveSubscription}
-              className="ml-2 text-2xl cursor-pointer"
-            />
+      
+        <div className="flex justify-end items-center pb-3 cursor-grab" {...listeners} {...attributes}>
+          <div className="flex flex-end justify-between w-full py-2 hover:bg-slate-200 rounded-sm pr-2">
+            <MdOutlineDragIndicator className="text-2xl" />
+
+            <div className="flex">
+              {!largeView &&
+                (isCollapsed ? (
+                  <TiPlus
+                    className="text-2xl cursor-pointer"
+                    onMouseDown={toggleCollapse}
+                  />
+                ) : (
+                  <TiMinus
+                    className="text-2xl cursor-pointer"
+                    onMouseDown={toggleCollapse}
+                  />
+                ))}
+              <IoMdClose
+                onMouseDown={handleRemoveSubscription}
+                className="ml-2 text-2xl cursor-pointer"
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex justify-between items-center pb-3 border-b-2 border-cyan-400 cursor-grab">
-        {community_icon && (
-          <Image
-            src={community_icon}
-            alt={display_name}
-            width={60}
-            height={60}
-          />
-        )}
-        <h1
-          className={
-            'text-xl uppercase font-bold tracking-[-1px] pl-3 cursor-pointer'
-          }
-        >
+        <div className="flex justify-between items-center pb-3 border-b-2 border-cyan-400">
+          {community_icon && (
+            <Image
+            {...listeners} {...attributes}
+              src={community_icon}
+              alt={display_name}
+              width={60}
+              height={60}
+              className="cursor-grab"
+            />
+          )}
+          <h1
+            className={
+              'text-xl uppercase font-bold tracking-[-1px] pl-3 cursor-pointer'
+            }
+          >
+            <Link
+              target="_blank"
+              className="hover:underline"
+              href={`https://www.reddit.com/r/${display_name}`}
+            >
+              r/{display_name}
+            </Link>
+          </h1>
           <Link
             target="_blank"
             href={`https://www.reddit.com/r/${display_name}`}
           >
-            r/{display_name}
+            <LiaExternalLinkAltSolid className="text-xl" />
           </Link>
-        </h1>
-        <Link target="_blank" href={`https://www.reddit.com/r/${display_name}`}>
-          <LiaExternalLinkAltSolid className="text-xl" />
-        </Link>
-      </div>
+        </div> 
       {isPrivate && (
         <p className="text-center my-5 text-md">This feed is private 🧙 </p>
       )}
@@ -207,8 +213,8 @@ const NewsPanel = ({
                       {content?.includes('/u/')
                         ? ''
                         : content?.length > 200
-                          ? content.slice(0, 200) + '...'
-                          : content}
+                        ? content.slice(0, 200) + '...'
+                        : content}
                     </p>
                     <Link
                       className="inline gap-1 text-sm uppercase items-center text-cyan-500 pb-3"

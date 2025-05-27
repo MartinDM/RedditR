@@ -2,10 +2,11 @@ import { parse } from 'node-html-parser'
 import { Article } from '../api/proxy/route'
 
 export type TParsedFeed = {
-  articles: TArticle[]
+  articles: Article[]
   isPrivate?: boolean
 }
 
+// @ts-ignore
 const extractImageFromContent = (content: string): string | null => {
   const imgMatch = content.match(/<img.*?src="(.*?)"/)
   if (!imgMatch) return null
@@ -13,10 +14,9 @@ const extractImageFromContent = (content: string): string | null => {
 }
 
 export const getFeedFromRss = async (
-  subreddit: string,
+  subreddit: string
 ): Promise<{
-  xmlDoc: Article[]
-  articles: Article[]
+  xmlDoc
   isPrivate: boolean
 }> => {
   const url = `/api/proxy?url=https://www.reddit.com/r/${subreddit}/.rss`
@@ -31,7 +31,7 @@ export const getFeedFromRss = async (
   if (!response.ok) {
     throw new Error('Failed to fetch RSS feed')
   } else {
-    const data: TParsedFeed = await response.json()
+    const data = await response.json()
     return { xmlDoc: data, isPrivate: !!data.isPrivate }
   }
 }
