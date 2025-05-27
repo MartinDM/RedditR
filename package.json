@@ -1,5 +1,6 @@
 {
   "name": "RedditR",
+  "license": "MIT",
   "version": "0.1.0",
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev --turbo",
@@ -32,6 +33,7 @@
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
+    "@types/node": "22.15.23",
     "@types/react": "^19.1.3"
   }
 }
