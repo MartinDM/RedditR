@@ -1,5 +1,9 @@
 # redditR
 
+<a href='https://news-feed-jade.vercel.app/'>
+<img width="506" alt="image" src="https://github.com/user-attachments/assets/823466f7-11a7-4500-aca3-c3385f040115" />
+</a>
+
 A simple Reddit feed searcher and reader built with Next.js, TypeScript, Tailwind CSS, and Jotai for state management.
 
 The app retrieves articles from each subreddits' XML RSS feed using DOMParser on NextJS back-end.
@@ -20,6 +24,11 @@ The app retrieves articles from each subreddits' XML RSS feed using DOMParser on
 - **Jotai** for global state management
 - **React** for UI components
 - **DOMParser** for extracting articles from XML RSS feeds
+
+<a href="https://news-feed-jade.vercel.app/">
+<img width="547" alt="Screenshot 2025-05-27 at 19 45 07" src="https://github.com/user-attachments/assets/5ae53b61-3fe2-4da3-b979-c97241245452" />
+</a>
+
 
 ## Getting Started
 
