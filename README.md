@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# redditR
+
+A simple Reddit feed searcher and reader built with Next.js, TypeScript, Tailwind CSS, and Jotai for state management.
+
+The app retrieves articles from each subreddits' XML RSS feed using DOMParser on NextJS back-end.
+
+## Features
+
+- Search for subreddits and add them to your subscriptions
+- View the latest articles from your subscribed subreddits
+- Subscriptions are stored in local storage for persistence
+- Drag-and-drop to reorder your subreddit panels
+- Responsive and modern UI with Tailwind CSS
+
+## Tech Stack
+
+- **Next.js** for server-side rendering and routing
+- **TypeScript** for type safety
+- **Tailwind CSS** for styling
+- **Jotai** for global state management
+- **React** for UI components
+- **DOMParser** for extracting articles from XML RSS feeds
 
 ## Getting Started
 
-First, run the development server:
+1. **Install dependencies:**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun run dev
-```
+   ```sh
+   yarn install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Run the development server:**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+   ```sh
+   yarn dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Learn More
+## Project Purpose
 
-To learn more about Next.js, take a look at the following resources:
+This project was created as a fun project to search for and follow subreddits, storing your subscriptions in local storage and learning how to use Jotai for state management. It uses DOMParser to extract articles from RSS feeds for each subreddit.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Made with 🩶 by [Martin](https://github.com/martinDM)
