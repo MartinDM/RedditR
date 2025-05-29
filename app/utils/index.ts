@@ -14,7 +14,7 @@ const extractImageFromContent = (content: string): string | null => {
 }
 
 export const getFeedFromRss = async (
-  subreddit: string
+  subreddit: string,
 ): Promise<{
   xmlDoc
   isPrivate: boolean

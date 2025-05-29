@@ -44,7 +44,11 @@ const NewsPanels = () => {
         </div>
         <div className="w-full flex justify-center py-4 fixed bottom-0 left-0  bg-slate-200 z-50 border-t border-gray-200">
           <span className="text-sm text-gray-500">
-            Made with <span role="img" aria-label="heart">🩶</span> by{' '}
+            Made with{' '}
+            <span role="img" aria-label="heart">
+              🩶
+            </span>{' '}
+            by{' '}
             <a
               href="https://github.com/martinDM"
               target="_blank"

@@ -23,13 +23,13 @@ const getTextFromContentHtml = (html: string) => {
 }
 
 const extractArticlesFromXML = (
-  xmlDoc: Document
+  xmlDoc: Document,
 ): ParsedFeed | NextResponse => {
   const entries = xmlDoc.getElementsByTagName('entry')
   if (!entries.length) {
     return NextResponse.json(
       { error: 'No entries found in the Atom feed' },
-      { status: 500 }
+      { status: 500 },
     )
   }
   const linkElement = xmlDoc.getElementsByTagName('link')[0]
@@ -39,7 +39,7 @@ const extractArticlesFromXML = (
     title: entry.getElementsByTagName('title')[0]?.textContent || '',
     id: entry.getElementsByTagName('id')[0]?.textContent || '',
     content: getTextFromContentHtml(
-      entry.getElementsByTagName('content')[0]?.textContent || ''
+      entry.getElementsByTagName('content')[0]?.textContent || '',
     ),
     author:
       entry.getElementsByTagName('name')[0]?.textContent?.split('/').pop() ||
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   if (!targetUrl) {
     return NextResponse.json(
       { error: 'Missing "url" query parameter' },
-      { status: 400 }
+      { status: 400 },
     )
   }
   let isPrivate = false
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     if (!response.ok && response.status !== 403) {
       return NextResponse.json(
         { error: `Failed to fetch the target URL: ${response.statusText}` },
-        { status: response.status }
+        { status: response.status },
       )
     }
 
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     console.error('Error fetching or parsing the feed:', error)
     return NextResponse.json(
       { error: 'Failed to fetch or parse the feed' },
-      { status: 500 }
+      { status: 500 },
     )
   }
 }

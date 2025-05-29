@@ -29,7 +29,6 @@ The app retrieves articles from each subreddits' XML RSS feed using DOMParser on
 <img width="547" alt="Screenshot 2025-05-27 at 19 45 07" src="https://github.com/user-attachments/assets/5ae53b61-3fe2-4da3-b979-c97241245452" />
 </a>
 
-
 ## Getting Started
 
 1. **Install dependencies:**
