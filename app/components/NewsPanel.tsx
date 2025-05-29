@@ -31,7 +31,7 @@ const NewsPanel = ({
   const [isPrivate, setIsPrivate] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [subscriptions, setSubscriptions] = useAtom(subscriptionsAtom)
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false)
+  const [show, setShow] = useState<boolean>(true)
   const [showingCount, setShowingCount] = useState<number>(null)
 
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -64,7 +64,7 @@ const NewsPanel = ({
   }, [display_name])
 
   useEffect(() => {
-    setIsCollapsed(false)
+    setShow(true)
   }, [largeView])
 
   const handleRemoveSubscription = () => {
@@ -94,7 +94,7 @@ const NewsPanel = ({
   }
 
   const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed)
+    setShow(!show)
   }
 
   const formatDate = (xmlDate: string): string => {
@@ -123,7 +123,7 @@ const NewsPanel = ({
 
           <div className="flex">
             {!largeView &&
-              (isCollapsed ? (
+              (!show ? (
                 <TiPlus
                   className="text-2xl cursor-pointer"
                   onMouseDown={toggleCollapse}
@@ -187,7 +187,7 @@ const NewsPanel = ({
               <span className="text-slate-500"> {showingCount} articles</span>
             </div>
           )}
-          <TECollapse show={!isCollapsed}>
+          <TECollapse show={show}>
             <ul>
               {content?.map((article) => {
                 const { pubDate, content, link, title, author } = article
