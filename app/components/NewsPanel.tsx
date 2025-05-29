@@ -12,7 +12,6 @@ import { IoMdClose } from 'react-icons/io'
 import { MdOutlineDragIndicator } from 'react-icons/md'
 import { getFeedFromRss } from '../utils'
 import { useMediaQuery } from 'usehooks-ts'
-import { TECollapse } from 'tw-elements-react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { type Article } from '../api/proxy/route'
@@ -187,7 +186,7 @@ const NewsPanel = ({
               <span className="text-slate-500"> {showingCount} articles</span>
             </div>
           )}
-          <TECollapse show={show}>
+          <div className={show ? '' : 'hidden'}>
             <ul>
               {content?.map((article) => {
                 const { pubDate, content, link, title, author } = article
@@ -228,7 +227,7 @@ const NewsPanel = ({
                 )
               })}
             </ul>
-          </TECollapse>
+          </div>
           <div className="mt-auto">
             <Link
               target="_blank"
