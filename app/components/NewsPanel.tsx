@@ -61,9 +61,11 @@ const NewsPanel = ({
       .finally(() => {
         setIsLoading(false)
       })
+      console.log(isCollapsed, 'isCollapsed');
   }, [display_name])
 
   useEffect(() => {
+    console.log('++', isCollapsed);
     if (largeView && isCollapsed) {
       setIsCollapsed(false)
     }

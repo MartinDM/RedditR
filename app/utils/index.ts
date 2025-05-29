@@ -1,5 +1,5 @@
 import { parse } from 'node-html-parser'
-import { Article } from '../api/proxy/route'
+import { type Article } from '../api/proxy/route'
 
 export type TParsedFeed = {
   articles: Article[]
